@@ -16,9 +16,9 @@ class EuclideanDistanceDistribution:
 
     def __init__(self):
         self.min: dict = {'value': float('inf'),
-                          "pair_numbers": tuple()}
+                          "pair": tuple()}
         self.max: dict = {'value': 0.0,
-                          "pair_numbers": tuple()}
+                          "pair": tuple()}
         self.mean: None | float = None
         self.distances_map: dict = {}
 
