@@ -1,4 +1,5 @@
 import argparse
+from typing import Any
 
 import numpy as np
 
@@ -15,14 +16,33 @@ def parse_args() -> tuple[int, int]:
     return int(number_of_vectors), int(dimension)
 
 
-def generate_csv(number_of_vectors: int,
-                 dimension: int) -> None:
-    """Generating a CSV file"""
-    vectors = np.random.uniform(-1, 1, size=(number_of_vectors, dimension))
-    np.savetxt("vectors.csv", vectors, delimiter=",")
-    print(f'File vectors.csv successfully generated. Number of vectors: {number_of_vectors}, dimension: {dimension}')
+class VectorsWorker:
+    def __init__(self, vectors_number, dimension):
+        self._vectors_number: int = self.validate_param(vectors_number)
+        self._dimension: int = self.validate_param(dimension)
+        self._vectors: Any = None
+
+    @staticmethod
+    def validate_param(value: int) -> int:
+        if value <= 0:
+            raise ValueError('all params must be great 0')
+        else:
+            return value
+
+    def generate_vectors_array(self) -> None:
+        self._vectors = np.random.uniform(-1, 1, size=(self._vectors_number, self._dimension))
+        print(f'Successfully generate vectors array. '
+              f'Vectors_number - {self._vectors_number}, '
+              f'dimension - {self._dimension} ')
+
+    def save_vectors(self, file_name) -> None:
+        """Save vectors to 'file_name' """
+        np.savetxt(f"{file_name}", self._vectors, delimiter=",")
+        print(f'{file_name} successfully saved.')
 
 
 if __name__ == '__main__':
     N, m = parse_args()
-    generate_csv(N, m)
+    vectors = VectorsWorker(N, m)
+    vectors.generate_vectors_array()
+    vectors.save_vectors('vectors.csv')
